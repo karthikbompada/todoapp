@@ -114,4 +114,5 @@ dependencies {
     androidTestImplementation "androidx.recyclerview:recyclerview:$recyclerViewVersion"
     androidTestImplementation "androidx.appcompat:appcompat:$appCompatVersion"
     androidTestImplementation "com.google.android.material:material:$materialVersion"
+
 }
