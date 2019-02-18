@@ -115,4 +115,7 @@ dependencies {
     androidTestImplementation "androidx.appcompat:appcompat:$appCompatVersion"
     androidTestImplementation "com.google.android.material:material:$materialVersion"
 
+    // external dependencies
+    implementation "com.snatik:storage:2.1.0"
+
 }

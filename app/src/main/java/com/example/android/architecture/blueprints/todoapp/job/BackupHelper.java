@@ -18,7 +18,7 @@ import com.example.android.architecture.blueprints.todoapp.data.source.TasksRepo
  */
 public final class BackupHelper {
     private static final String TAG = "BackupHelper";
-    public static final int BACKUP_JOB_ID = 6601099;
+    public static final int BACKUP_JOB_ID = 6601098;
 
     /**
      * Checks if we have a job scheduler job already created, and if not, creates
@@ -65,10 +65,16 @@ public final class BackupHelper {
     public static boolean scheduleBackupJob(
             Context context,
             JobScheduler jobScheduler) {
-        JobInfo.Builder builder = new JobInfo.Builder(BACKUP_JOB_ID,
+        /*JobInfo.Builder builder = new JobInfo.Builder(BACKUP_JOB_ID,
                 new ComponentName(context, BackupJobService.class))
                 .setPeriodic(DateUtils.DAY_IN_MILLIS)
                 .setRequiresCharging(true)
+                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+                .setBackoffCriteria(DateUtils.HOUR_IN_MILLIS / 2,
+                        JobInfo.BACKOFF_POLICY_EXPONENTIAL)
+                .setPersisted(true);*/
+        JobInfo.Builder builder = new JobInfo.Builder(BACKUP_JOB_ID,
+                new ComponentName(context, BackupJobService.class))
                 .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
                 .setBackoffCriteria(DateUtils.HOUR_IN_MILLIS / 2,
                         JobInfo.BACKOFF_POLICY_EXPONENTIAL)
