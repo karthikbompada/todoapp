@@ -30,10 +30,12 @@ import com.example.android.architecture.blueprints.todoapp.R;
 import com.example.android.architecture.blueprints.todoapp.ScrollChildSwipeRefreshLayout;
 import com.example.android.architecture.blueprints.todoapp.data.Task;
 import com.example.android.architecture.blueprints.todoapp.databinding.TasksFragBinding;
+import com.example.android.architecture.blueprints.todoapp.job.BackupHelper;
 import com.example.android.architecture.blueprints.todoapp.util.SnackbarUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.PopupMenu;
@@ -93,6 +95,9 @@ public class TasksFragment extends Fragment {
                 break;
             case R.id.menu_refresh:
                 mTasksViewModel.loadTasks(true);
+                break;
+            case R.id.backup_now:
+                BackupHelper.setupTaskBackup(Objects.requireNonNull(getContext()));
                 break;
         }
         return true;
