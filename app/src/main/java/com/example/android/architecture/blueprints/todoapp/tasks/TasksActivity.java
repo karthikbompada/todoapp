@@ -16,8 +16,12 @@
 
 package com.example.android.architecture.blueprints.todoapp.tasks;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.android.architecture.blueprints.todoapp.Event;
@@ -32,6 +36,7 @@ import com.google.android.material.navigation.NavigationView;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentActivity;
@@ -40,7 +45,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 
 public class TasksActivity extends AppCompatActivity implements TaskItemNavigator, TasksNavigator {
-
+    private static final String TAG = "TasksActivity";
     private DrawerLayout mDrawerLayout;
 
     private TasksViewModel mViewModel;
@@ -57,6 +62,8 @@ public class TasksActivity extends AppCompatActivity implements TaskItemNavigato
         setupViewFragment();
 
         mViewModel = obtainViewModel(this);
+
+        isStoragePermissionGranted();
 
         // Subscribe to "open task" event
         mViewModel.getOpenTaskEvent().observe(this, new Observer<Event<String>>() {
@@ -79,6 +86,25 @@ public class TasksActivity extends AppCompatActivity implements TaskItemNavigato
                 }
             }
         });
+    }
+
+    public  boolean isStoragePermissionGranted() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                Log.v(TAG,"Permission is granted");
+                return true;
+            } else {
+
+                Log.v(TAG,"Permission is revoked");
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                return false;
+            }
+        }
+        else { //permission is automatically granted on sdk<23 upon installation
+            Log.v(TAG,"Permission is granted");
+            return true;
+        }
     }
 
     public static TasksViewModel obtainViewModel(FragmentActivity activity) {

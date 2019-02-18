@@ -4,6 +4,7 @@ import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
 import android.content.Context;
+import android.os.Handler;
 import android.text.format.DateUtils;
 import android.util.Log;
 
@@ -11,6 +12,7 @@ import com.example.android.architecture.blueprints.todoapp.App;
 import com.example.android.architecture.blueprints.todoapp.BuildConfig;
 import com.example.android.architecture.blueprints.todoapp.Injection;
 import com.example.android.architecture.blueprints.todoapp.data.source.TasksRepository;
+import com.example.android.architecture.blueprints.todoapp.util.AppExecutors;
 
 
 /**
@@ -27,6 +29,7 @@ public final class BackupHelper {
      * @param context
      */
     public static boolean setupTaskBackup(Context context) {
+        Log.i(TAG, "inside BackUpHelper setupTaskBackup: ");
         JobScheduler js = (JobScheduler)
                 context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
         for (JobInfo job : js.getAllPendingJobs()) {
@@ -38,6 +41,17 @@ public final class BackupHelper {
 
         // Didn't find the BACKUP job, so let's make one
         return scheduleBackupJob(context, js);
+        /*return new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                new Thread() {
+                    @Override
+                    public void run() {
+                       backupNow();
+                    }
+                }.start();
+            }
+        });*/
     }
 
     static boolean backupNow() {
@@ -54,8 +68,6 @@ public final class BackupHelper {
             result = repository.backup();
         } catch (Exception any) {
             Log.e(TAG, "Unable to backup due to unknown failure", any);
-            // May want to report this to an external error analytics service such as
-            // Fabric/Firebase Error Reporting or ACRA (https://github.com/ACRA/acra).
         } finally {
             App.setBackingUp(false);
         }
@@ -65,6 +77,8 @@ public final class BackupHelper {
     public static boolean scheduleBackupJob(
             Context context,
             JobScheduler jobScheduler) {
+
+        Log.i(TAG, "inside scheduleBackupJob: ");
         /*JobInfo.Builder builder = new JobInfo.Builder(BACKUP_JOB_ID,
                 new ComponentName(context, BackupJobService.class))
                 .setPeriodic(DateUtils.DAY_IN_MILLIS)
@@ -75,10 +89,7 @@ public final class BackupHelper {
                 .setPersisted(true);*/
         JobInfo.Builder builder = new JobInfo.Builder(BACKUP_JOB_ID,
                 new ComponentName(context, BackupJobService.class))
-                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
-                .setBackoffCriteria(DateUtils.HOUR_IN_MILLIS / 2,
-                        JobInfo.BACKOFF_POLICY_EXPONENTIAL)
-                .setPersisted(true);
+                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY);
 
         JobInfo jobInfo;
         try {
@@ -93,6 +104,7 @@ public final class BackupHelper {
         }
 
         int result = jobScheduler.schedule(jobInfo);
+        Log.i(TAG, "scheduleBackupJob: result" + result);
         if (result != JobScheduler.RESULT_SUCCESS) {
             Log.e(TAG, "Fatal error scheduling job");
             return false;

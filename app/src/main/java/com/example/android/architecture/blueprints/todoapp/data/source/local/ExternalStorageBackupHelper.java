@@ -23,6 +23,7 @@ class ExternalStorageBackupHelper {
     private final String backupFileName;
 
     ExternalStorageBackupHelper(String fileName) {
+        Log.i(TAG, "ExternalStorageBackupHelper: called");
 
         Context context = App.get();
         storage = new Storage(context);
@@ -34,7 +35,7 @@ class ExternalStorageBackupHelper {
         }
         String path = storage.getExternalStorageDirectory();
         backupDir = path + File.separator + context.getResources().getString(R.string.app_name);
-        storage.createDirectory(backupDir); // fails with log if already exists
+       // storage.createDirectory(backupDir); // fails with log if already exists
         Log.i(TAG, "Backing up to " + backupDir);
     }
 
@@ -44,6 +45,8 @@ class ExternalStorageBackupHelper {
             str.append(obj.toString())
                     .append(System.lineSeparator());
         }
-        storage.createFile(backupDir + File.separator + backupFileName, str.toString());
+        Log.e(TAG, backupDir + File.separator + backupFileName);
+        Log.e(TAG, "Content LIST::" + str.toString());
+      //  storage.createFile(backupDir + File.separator + backupFileName, str.toString());
     }
 }

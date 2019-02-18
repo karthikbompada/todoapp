@@ -17,6 +17,8 @@
 package com.example.android.architecture.blueprints.todoapp.data.source.remote;
 
 import android.os.Handler;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.example.android.architecture.blueprints.todoapp.data.Task;
@@ -26,6 +28,8 @@ import com.google.common.collect.Lists;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import static com.example.android.architecture.blueprints.todoapp.App.TAG;
 
 /**
  * Implementation of the data source that adds a latency simulating network.
@@ -42,20 +46,6 @@ public class TasksRemoteDataSource implements TasksDataSource {
         TASKS_SERVICE_DATA = new LinkedHashMap<>(2);
         addTask("Build tower in Pisa", "Ground looks good, no foundation work required.", "0");
         addTask("Finish bridge in Tacoma", "Found awesome girders at half the cost!", "1");
-        addTask("Finish bridge in Tacoma", "Found awesome girders at half the cost!", "2");
-        addTask("Finish bridge in Tacoma", "Found awesome girders at half the cost!", "3");
-        addTask("Finish bridge in Tacoma", "Found awesome girders at half the cost!", "4");
-        addTask("Finish bridge in Tacoma", "Found awesome girders at half the cost!", "5");
-        addTask("Finish bridge in Tacoma", "Found awesome girders at half the cost!", "6");
-        addTask("Finish bridge in Tacoma", "Found awesome girders at half the cost!", "7");
-        addTask("Finish bridge in Tacoma", "Found awesome girders at half the cost!", "8");
-        addTask("Finish bridge in Tacoma", "Found awesome girders at half the cost!", "12");
-        addTask("Finish bridge in Tacoma", "Found awesome girders at half the cost!", "13");
-        addTask("Finish bridge in Tacoma", "Found awesome girders at half the cost!", "14");
-        addTask("Finish bridge in Tacoma", "Found awesome girders at half the cost!", "15");
-        addTask("Finish bridge in Tacoma", "Found awesome girders at half the cost!", "16");
-        addTask("Finish bridge in Tacoma", "Found awesome girders at half the cost!", "17");
-        addTask("Finish bridge in Tacoma", "Found awesome girders at half the cost!", "18");
     }
 
     public static TasksRemoteDataSource getInstance() {
@@ -167,8 +157,8 @@ public class TasksRemoteDataSource implements TasksDataSource {
 
     @Override
     public boolean backup() {
-        // TODO: Takes everything that is currently in TASKS_SERVICE_DATA and saves it to the
-        // remote/backend service.
+        // TODO: Takes everything that is currently in TASKS_SERVICE_DATA and saves it to the remote/backend service.\
+        Log.i(TAG, "backup: Update Data with Remote Server");
         return false;
     }
 }
